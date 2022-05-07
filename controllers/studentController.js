@@ -3,8 +3,6 @@ const db = require("../models/index");
 const Student = db.student;
 const BasicStudent = db.basicStudent;
 
-const Op = db.Sequelize.Op;
-
 exports.create = async (req, res, next) => {
   try {
     const basicStudent = {
@@ -17,7 +15,7 @@ exports.create = async (req, res, next) => {
       FatherName: req.body.FatherName,
       Address: req.body.Address,
     };
-    // console.log(Student);
+
     const newStudent = await Student.create(student);
     const newBasicStudent = await BasicStudent.create(basicStudent);
     res.status(200).json({ status: "success", newStudent, newBasicStudent });
@@ -28,8 +26,9 @@ exports.create = async (req, res, next) => {
 };
 
 exports.findAll = async (req, res, next) => {
-  console.log(req.query);
-  const { pageSize, page } = req.query;
+  let { pageSize, page } = req.query;
+  if (!pageSize) pageSize = null;
+  if (!page) page = null;
   try {
     const allStudent = await BasicStudent.findAll({
       include: [
@@ -50,9 +49,14 @@ exports.findAll = async (req, res, next) => {
 exports.findOne = async (req, res, next) => {
   try {
     const roll = req.params.roll;
-    console.log(roll);
+
     const student = await BasicStudent.findAll({
       where: { Roll: roll },
+      include: [
+        {
+          model: Student,
+        },
+      ],
     });
     res.status(200).json({ status: "success", student });
   } catch (err) {
@@ -65,6 +69,7 @@ exports.updateStudent = async (req, res, next) => {
     const roll = req.params.roll;
     const student = await BasicStudent.update(req.body, {
       where: { Roll: roll },
+      returning: true,
     });
     res.status(200).json({ status: "success", student });
   } catch (err) {
