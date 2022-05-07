@@ -1,11 +1,14 @@
+const BasicStudent = require("./BasicStudent");
+
 const Student = (sequelize, Sequelize) => {
   const StudentSchema = sequelize.define("student", {
     Roll: {
       type: Sequelize.STRING,
+      references: {
+        model: "basicStudents",
+        key: "Roll",
+      },
       allowNull: false,
-    },
-    Name: {
-      type: Sequelize.STRING,
     },
     FatherName: {
       type: Sequelize.STRING,
@@ -13,12 +16,11 @@ const Student = (sequelize, Sequelize) => {
     Address: {
       type: Sequelize.STRING,
     },
-    Marks: {
-      type: Sequelize.INTEGER,
-    },
   });
 
   return StudentSchema;
 };
+
+
 
 module.exports = Student;

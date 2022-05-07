@@ -1,5 +1,6 @@
 const dbConfig = require("../config/config.js");
 const Student = require("./student.js");
+const BasicStudent = require("./BasicStudent.js");
 
 const Sequelize = require("sequelize");
 
@@ -32,4 +33,6 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 db.student = Student(sequelize, Sequelize);
+db.basicStudent = BasicStudent(sequelize, Sequelize);
+db.basicStudent.hasOne(db.student, { foreignKey: "Roll" });
 module.exports = db;
