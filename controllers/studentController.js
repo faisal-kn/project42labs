@@ -28,6 +28,8 @@ exports.create = async (req, res, next) => {
 };
 
 exports.findAll = async (req, res, next) => {
+  console.log(req.query);
+  const { pageSize, page } = req.query;
   try {
     const allStudent = await BasicStudent.findAll({
       include: [
@@ -35,6 +37,8 @@ exports.findAll = async (req, res, next) => {
           model: Student,
         },
       ],
+      limit: pageSize,
+      offset: page * pageSize,
     });
     res.status(200).json({ status: "success", allStudent });
   } catch (err) {

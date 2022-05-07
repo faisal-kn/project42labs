@@ -21,6 +21,4 @@ const Student = (sequelize, Sequelize) => {
   return StudentSchema;
 };
 
-
-
 module.exports = Student;
